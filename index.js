@@ -38,6 +38,15 @@ const c = canvas.getContext("2d");
 // 	c.stroke();
 // }
 
+const mouse = {
+	x: undefined,
+	y: undefined
+}
+
+window.addEventListener('mousemove', (event) => {
+	mouse.x = event.x;
+	mouse.y = event.y;
+})
 class Circle {
 	constructor(x, y, dx, dy, radius) {
 		this.x = x;
@@ -52,6 +61,7 @@ class Circle {
 		c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
 		c.strokeStyle = "blue";
 		c.stroke();
+		c.fill();
 	}
 
 	update() {
@@ -65,6 +75,16 @@ class Circle {
 
 		this.x += this.dx;
 		this.y += this.dy;
+
+		// interactivity
+		if(mouse.x - this.x < 50 && mouse.x - this.x > -50 && mouse.y - this.y < 50 && mouse.y - this.y > -50) {
+			if(this.radius < 150)
+			this.radius += 3;
+		} else if (this.radius > 5) {
+			this.radius -= 1;
+		}
+
+		this.draw();
 	}
 }
 
@@ -77,8 +97,8 @@ for (let i = 0; i < 100; i++) {
 	let radius = 30;
 	let x = Math.random() * (innerWidth - radius * 2) + radius;
 	let y = Math.random() * (innerHeight - radius * 2) + radius;
-	let dx = 2 + (Math.random() - 0.5) * 8;
-	let dy = 2 + (Math.random() - 0.5) * 8;
+	let dx = (Math.random() - 0.5) * 3;
+	let dy = (Math.random() - 0.5) * 3;
 
 	circleArray.push(new Circle(x, y, dx, dy, radius));
 }
