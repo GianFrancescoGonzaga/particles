@@ -43,6 +43,17 @@ const mouse = {
 	y: undefined
 }
 
+let maxRadius = 100;
+let minRadius = 5;
+
+const colorArray = [
+	'#E54B4B',
+	'#FFA987',
+	'#F7EBE8',
+	'#444140',
+	'#1E1E24',
+]
+
 window.addEventListener('mousemove', (event) => {
 	mouse.x = event.x;
 	mouse.y = event.y;
@@ -54,13 +65,13 @@ class Circle {
 		this.dx = dx;
 		this.dy = dy;
 		this.radius = radius;
+		this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
 	}
 
 	draw() {
 		c.beginPath();
 		c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-		c.strokeStyle = "blue";
-		c.stroke();
+		c.fillStyle = this.color;
 		c.fill();
 	}
 
@@ -78,13 +89,12 @@ class Circle {
 
 		// interactivity
 		if(mouse.x - this.x < 50 && mouse.x - this.x > -50 && mouse.y - this.y < 50 && mouse.y - this.y > -50) {
-			if(this.radius < 150)
+			if(this.radius < maxRadius)
 			this.radius += 3;
-		} else if (this.radius > 5) {
+		} else if (this.radius > minRadius) {
 			this.radius -= 1;
 		}
 
-		this.draw();
 	}
 }
 
@@ -93,7 +103,7 @@ class Circle {
 
 let circleArray = [];
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 150; i++) {
 	let radius = 30;
 	let x = Math.random() * (innerWidth - radius * 2) + radius;
 	let y = Math.random() * (innerHeight - radius * 2) + radius;
