@@ -43,7 +43,7 @@ const mouse = {
 	y: undefined
 }
 
-let maxRadius = 100;
+let maxRadius = 40;
 let minRadius = 5;
 
 const colorArray = [
@@ -58,6 +58,18 @@ window.addEventListener('mousemove', (event) => {
 	mouse.x = event.x;
 	mouse.y = event.y;
 })
+
+window.addEventListener('touchmove', (event) => {
+	mouse.x = event.x;
+	mouse.y = event.y;
+});
+
+window.addEventListener('resize', () => {
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+
+	init();
+})
 class Circle {
 	constructor(x, y, dx, dy, radius) {
 		this.x = x;
@@ -65,6 +77,7 @@ class Circle {
 		this.dx = dx;
 		this.dy = dy;
 		this.radius = radius;
+		this.minRadius = radius;
 		this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
 	}
 
@@ -88,10 +101,10 @@ class Circle {
 		this.y += this.dy;
 
 		// interactivity
-		if(mouse.x - this.x < 50 && mouse.x - this.x > -50 && mouse.y - this.y < 50 && mouse.y - this.y > -50) {
-			if(this.radius < maxRadius)
-			this.radius += 3;
-		} else if (this.radius > minRadius) {
+		if (mouse.x - this.x < 50 && mouse.x - this.x > -50 && mouse.y - this.y < 50 && mouse.y - this.y > -50) {
+			if (this.radius < maxRadius)
+				this.radius += 4;
+		} else if (this.radius > this.minRadius) {
 			this.radius -= 1;
 		}
 
@@ -100,17 +113,21 @@ class Circle {
 
 // let circle = new Circle(200, 200, 3, 3, 30);
 // let circle2 = new Circle(300, 200, 3, 3, 30);
-
 let circleArray = [];
 
-for (let i = 0; i < 150; i++) {
-	let radius = 30;
-	let x = Math.random() * (innerWidth - radius * 2) + radius;
-	let y = Math.random() * (innerHeight - radius * 2) + radius;
-	let dx = (Math.random() - 0.5) * 3;
-	let dy = (Math.random() - 0.5) * 3;
 
-	circleArray.push(new Circle(x, y, dx, dy, radius));
+function init() {
+	circleArray = [];
+
+	for (let i = 0; i < 1000; i++) {
+		let radius = Math.random() * 5 + 1;
+		let x = Math.random() * (innerWidth - radius * 2) + radius;
+		let y = Math.random() * (innerHeight - radius * 2) + radius;
+		let dx = (Math.random() - 0.5) * 3;
+		let dy = (Math.random() - 0.5) * 3;
+
+		circleArray.push(new Circle(x, y, dx, dy, radius));
+	}
 }
 
 function animate() {
@@ -122,5 +139,7 @@ function animate() {
 		x.update();
 	});
 }
+
+init();
 
 animate();
